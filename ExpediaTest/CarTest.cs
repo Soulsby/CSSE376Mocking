@@ -50,5 +50,33 @@ namespace ExpediaTest
 		{
 			new Car(-5);
 		}
+    
+        [TestMethod]
+        public void TestThatCarDoesGetCarLocation()
+        {
+            IDatabase mockDB = mocks.StrictMock<IDatabase>();
+            
+            String carLocation = "Atlanta";
+            String anotherCarLocation = "Miami";
+
+            Expect.Call(mockDB.getCarLocation(112)).Return(carLocation);
+            Expect.Call(mockDB.getCarLocation(998)).Return(anotherCarLocation);
+
+            mocks.ReplayAll();
+
+            Car target = new Car(3);
+
+            target.Database = mockDB;
+
+            String result;
+
+            result = target.getCarLocation(112);
+            Assert.AreEqual(carLocation, result);
+
+            result = target.getCarLocation(998);
+            Assert.AreEqual(anotherCarLocation, result);
+
+            mocks.VerifyAll();
+        }
 	}
 }
